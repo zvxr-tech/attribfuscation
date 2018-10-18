@@ -1,0 +1,165 @@
+/*
+Attribfuscator - CSS Front-end
+Mike Clark - 2017
+*/
+body {
+    background-color:  #010101;
+    color: #eeeeee;
+}
+
+.no-visible {
+    display: none;
+}
+
+#statusTextArea {
+	height: 5em;
+	width: 300px;
+}
+
+/* SVG text slection disable CSS from https://gist.github.com/23maverick23/64b3b587c88697558fac */
+svg text {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+svg text::selection {
+    background: none;
+}
+body * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+body *::selection {
+    background: none;
+}
+
+
+#secretSpace-pane svg text {
+    dominant-baseline: text-before-edge;
+    
+}
+
+
+#secretSpace-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+#secret-pane svg text {
+    dominant-baseline: text-before-edge;
+    text-anchor: start;
+}
+
+#secret-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+#secretCopy-pane svg text {
+    dominant-baseline: text-before-edge;
+    text-anchor: start;
+}
+
+#secretCopy-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+#challenge-pane svg text {
+    dominant-baseline: text-before-edge;
+    /*
+    dominant-baseline: middle;
+    text-anchor: middle;
+    */
+}
+
+
+#challenge-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+#challengeResponse-pane svg text {
+    dominant-baseline: text-before-edge;
+    text-anchor: start;
+}
+
+#challengeResponse-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+.challengeElement, use {
+    cursor: pointer;
+}
+
+
+#overlay-pane {
+    text-align: center;
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    font-size: larger;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.greenbutton {
+
+    margin-left: 5%;
+    background-color: #2ecc71;
+    /* box-shadow: 0px 5px 0px 0px #15B358; */
+    display: inline-block;
+    width: 35%;
+    max-width: 130px;
+    height: 40px;
+
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.greenbutton:active {
+    background-color: #48E68B;
+}
+
+.greenbutton:focus { outline:0;}
+
+.redbutton {
+    margin-right: 5%;
+    background-color: #e74c3c;
+    /* box-shadow: 0px 5px 0px 0px #CE3323; */
+    display: inline-block;
+    width: 35%;
+    max-width: 130px;
+    height: 40px;
+
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.redbutton:active {
+    background-color: #FF6656;
+}
+
+.redbutton:focus { outline:0;}

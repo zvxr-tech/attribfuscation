@@ -1,0 +1,710 @@
+\documentclass[12pt]{document}
+\usepackage[letterpaper,top=1in, bottom= 1in, left= 1in, right= 1in]{geometry}
+\author{
+MIKE CLARK\\
+University of Calgary\\
+}
+
+\begin{abstract}
+A common challenge-response type of password system is a numeric pinpad; such as push-button telephones, automated  teller machines (ATMs), and TODO.
+The challenge is a presented as a three-by-three grid inlaid with the numerals '1' through '9'.
+The correct response is the secret (an sequence of digits from the numeric set contained in the challenge presented), which is known only to the user. 
+
+The entropy of such a system is calculable $(1/possible digit values of digits)^number of secret digits$. However, after a single viewing of a challenge-response session, an adversary will have a 100% probability of
+guessing the correct response when presented with another challenge because they will have **directly observedthey will know the entire secret. In 
+
+We propose a challenge-response password system that will mitigate direct and indirect obervation attacks to a degree parameterized over the system.
+
+
+Our contribution is a working prototype implementation, mathematical formulas to calculate the entropy of the system after a variable number of challenge-response viewings, and the results of a study of the usability of the system.
+
+
+ABSTRACT2
+In a password system such as the numeric pinpad on most Automated Teller Machines (ATM), the user is presented with a challenge (i.e. the numerals 1 through 9 presented over a 3-by-3 grid), and the user must then enter the corresponding response (which is their secret/password). The correct secret is a successful response to the challenge presented, and a failure otherwise. However, this challenge-response password system suffers from attacks where an adversary can deduce the secret either directly (direct observation) or indirectly (physical indicators such as smudges or worn buttons). Once the adversary knows the secret, they can provide a valid response to the system. In other words, an adversary will know the password with absolute certainty after viewing the user enter their password once.
+
+We propose a password system that allows for the adversary to have complete and full observations of a user's challenges and responses, yet there will still remain a calculable amount of uncertainty as to what the user's secret is.
+This property is leveraged to provide security against shoulder-surfing and smudge-like attacks.
+
+            
+\category{D.2.0}{General}{Protection Mechanisms}
+\category{A.1}{Introductory and Survey}{Security}
+\category{K.6.5}{Security and Protection}{}
+
+\terms{Security}
+
+\keywords{graphical password, usable security}
+
+\begin{document}
+            
+\begin{bottomstuff} 
+Authors' addresses: 
+M. Clark
+\newline
+\end{bottomstuff}
+            
+\maketitle
+
+
+\begin{Introduction}
+NOTE TO THE READER: 
+This was an early WIP whitepaper-- and not finished. See paper/README.md for a more complete whitepaper
+
+- the vocabulary used in this document should be accurate, however, patent applications in this domain may already have existing terminology that is commonly used. For this reason, any technical terms should be verified for correctness against existing patents.
+- things can be broadened so that the patent can encompass derivations.
+- we count from zero (see enumerations)
+
+PROBLEM
+=======
+
+In this document, we propose a new challenge-response authentication (CRA) protocol and an implementation that uses the new protocol.
+
+BACKGROUND
+==========
+
+A CRA is a protocol in which one party presents a challenge and the other party is authenticated by providing the correct response.
+Commonly, the challenge-response is setup to assert knowledge of some secret.
+For example, a password authentication protocol could be as follows:
+
+A priori, the parties agree upon a shared secret (password). For this example, let the secret = "1234".
+
+A challenge could be: "What is the password?"
+If the response was "1234", the responder would be authenticated.
+Otherwise, they would not be authenticated.
+
+You can define the secret-space of this example system as the set of all possible values that the response could be composed of. If we limited the secret to numeric values only, the secret-space would be the set: {1,2,3,4,5,6,7,8,9}.
+
+
+When implementing this example system, the party that authenticating can be realize as a separate blackbox that is responsible for knowing the secret (password), generating a challenge (though not necessarily -- see below), and authenticating based on a response to a given challenge with respect to the known secret. The party that is being authenticated can be realized as the user interface that a person interacts with. The user interface is responsible for presenting a challenge and generating a response based on user interaction.
+
+An example implementation of a numeric password authentication system is an ATM.
+Here, the user interface is the buttons you press when you enter your pin.  The blackbox would be some remote system that authenticates against the users password that it has knowledge of. In this case, the challenge is static (I.e. the same arrangement of numeric buttons) so it would not need to be generated by the blackbox. (It should be noted that nothing theoretically would prevent the user interface and blackbox to coexist.)
+
+
+
+
+We could also construct a password authentication system using another type of object other than numerals in this system. For example, the secret-space could be pictures of animals, such that:
+secret-space = {cat, dog, mouse, lion, giraffe, zebra, tiger, snake, turtle}.
+
+And the challenge presented by the user interface would be a similar 3x3 grid, where each grid-square is occupied by one of the animals in the secret-space.
+The correct response to the challenge would be the sequence of animals comprising the secret (password).
+
+In practice, you can generalize both of the aforementioned examples.
+We accomplish this by establishing a mapping between an enumeration (I.e. 0,1,2,3,4,...) and how to present the challenge digits.
+For the numeric password example we would establish the following mapping,
+
+enumeration | presentation 
+---------------------
+0 | '1'
+1 | '2'
+2 | '3'
+3 | '4'
+4 | '5'
+5 | '6'
+6 | '7'
+7 | '8'
+8 | '9'
+
+And for the animal password example we would establish the following mapping,
+
+enumeration | presentation
+---------------------
+0 | cat
+1 | dog
+2 | mouse
+3 | lion
+4 | giraffe
+5 | zebra
+6 | tiger
+7 | snake
+8 | turtle
+
+
+The blackbox does not need to have knowledge of the mapping. The blackbox will store the secret, generate challenges, and accept response input in the enumeration encoding.
+For example, it would store the password from the numeric example ('1','2','5','6') as (0,1,4,5). And it would expect that same format as a response from the user interface.
+
+Using the animal password example, it would store the password (cat,dog,giraffe,zebra) as (0,1,4,5).
+
+The user interface will be aware of the mapping and will generate the challenge in the presentation encoding (E.g. '1','2',... and dog,cat,...), however when it generates a response it will map the user selection (E.g. cat,dog,giragge,zebra) back to the enumeration (E.g. 0,1,4,5).
+
+
+So far, we have only examined systems with static challenges. We will now consider systems where the challenge is generated by the blackbox.
+An example of this exists to combat smudge-attacks (whereby the attacker attempts to identify artifacts from the user interaction such as finger smudges or worn buttons to deduce the password), where the challenge consists of a 3x3 grid of the numerals 1 through 9, however, they are permuted in a random ordering each challenge (each time the user is asked to enter their password).
+For example, the blackbox might generate the following challenge (3,8,1,5,2,0,6,7,4), which, using the numeric mapping (above) would look like:
+'4' | '9' | '2'
+'6' | '3' | '1'
+'4' | '8' | '5'
+
+If the secret stored internally by the blackbox was (0,1,4,5), an authenticated user will have selected the digits corresponding to '1','2','5','6' (middle-right, top-right, bottom-right, middle-left), and the user interface would have generate the response (0,1,4,5) by mapping the presentation encoding back to the enumeration, before submitting it to the blackbox for authentication. The blackbox would check and see that the response matches the secret, and authenticate the user.
+
+
+PROPOSED SYSTEM
+===============
+So far we have provided a primer on existing CRA systems, nothing here is new. We will now use this as background to discuss our proposed CRA protocol and implementation.
+We begin by defining a new secret-space composed of key-value pairs over two enumaration domains (we name key and value) of size we specify.
+
+Suppose we chose a key domain size of 2 and value domain size of 4, this would result in the following secret-space populated with key-value pairs, where we use the notation "(KEY,VALUE)" (I.e. (0,0) means zero'th value of the zero'th key.:
+  (0,0), (0,1), (0,2), (0,3),
+  (1,0), (1,1), (1,2), (1,3).
+
+
+Similar to before, the secret would be a sequence of any of elements from the secret-space (in this case an element being a these key-value pairs).
+For example,
+  (1,1),(0,3),(1,0),(0,1)
+, is a secret of length four. 
+
+What is different is how the blackbox generates challenges and the format of the response that it accepts from the user interface.
+First, we will talk about how it generates challenges.
+Using the earlier secret-space (key size = 2, value size = 4), a challenge is generated by assigning a random element from each key to a digit the user can select on the challenge grid eventually rendered by the user interface.
+An example challenge generated with this blackbox could be,
+
+  ((0,0), (1,3)), ((0,2), (1,2)),
+  ((0,3), (1,0)), ((0,1), (1,1)).
+
+Where the first digit's values are 0 and 1, over the keys 0 and 1, respectively.
+Where the second digit's values are 2 and 2, over the same keys.
+Where the third digit's values are 3 and 0, over the same keys.
+Where the fourth digit's values are 1 and 1, over the same keys.
+
+In general, each response digit will contain one value for each key. And the number of elements comprising the challenge is equal to the size of the value set. 
+
+This challenge is communicated with the user interface, which then applies a mapping from the enumeration encoding to the presentation.
+However, the a mapping now exists for each key.
+
+For example a mapping for the system described above (key size = 2, value size = 9) could be:
+
+For key=0,
+  enumeration (value) | presentation
+  ---------------------
+  0 | cat
+  1 | dog
+  2 | mouse
+  3 | lion
+
+
+For key=1,
+  enumeration (value) | presentation
+  ---------------------
+  0 | red
+  1 | green
+  2 | blue
+  3 | yellow.
+
+
+A user interface with a 2x2 grid layout would render the example challenge above, 
+
+  +-----------------------+
+  |yellow cat | blue mouse|
+  |-----------------------|
+  |red lion   | green dog |
+  +-----------------------+
+
+A difference between our system and existing CRA systems is that when the user selects a digit from the challenge the response generated is the set of all key-value pairs for that digit.
+For example, if the user selected the image of the yellow cat, the corresponding response digit stored by the user interface would be ((0,0), (1,3)).
+This is because in the 0'th-key mapping, the value for cat is 0. And in the 1'st-key mapping, the value for yellow is 3.
+
+For example, the 4-digit response,
+  ((0,1),(1,1)),  ((0,3),(1,0)), ((0,0),(1,3)), ((0,3),(1,0))
+, would be generated by the user selecting the:
+green dog, red lion, yellow cat, and green dog.
+
+The blackbox will be expecting a response in the same format as the challenge it generated (I.e. same key and value set size).
+The blackbox should only accept well-formed input, where well-formed input is defined as each response digit having:
+A single value in the range of the value enumeration size for each key in the key enumeration.
+This would prevent attacks whereby the adversary would submit every key-value pairing in one submission.
+
+If well formed, the blackbox will then evaluate the repsonse with respect to the known secret.
+The blackbox will authenticate the reponse if, and only if,
+  For each secret digit,
+    the secret's key-value pair is one of the key-value pairs in the corresponding response digit.
+
+For example, using the secret from before ((1,1),(0,3),(1,0),(0,1)), and the challenge above, the correct response would be ((0,1),(1,1)), ((0,3),(1,0)), ((0,0),(1,3)), ((0,3),(1,0)).
+This is because the first digit of the secret (1,1) matches the key-value pair (1,1) in the first response digit ((0,1),(1,1)). Similar matches occur for the rest of the secret and response digits.
+
+From the user's prespective, they would be unaware of the internal enumerations and keyvalue pairs.
+Here they would know their secret as green, lion, red, dog (not (1,1),(0,3),(1,0),(0,1)) and they respond by selecting the challenge digit containing that attribute (regardless of the other attributes in that digit. I.e. selecting the green dog because it's green). It should be noted that we have not discussed how the user chooses their (secret). This is because we are not proposing anything new or novel about that part of the system. For example, a traditional 1-9 pinpad would use the same grid for the user to interact with when setting their password. Similarly, a grid-layout could be used to present the entire secret-space (each key-value pair expressed in it's presentation encoding I.e. dog, cat, red, blue) for our proposed system. (Or whatever worked best, for a given implemenetation.)
+
+The example we have shown, used a key enumeration size of 2 and value enumeration size of 9, however, a key feature of the system is the parameterization of these two values. For example, by setting key_size to 1 and value_size to 9, and setting a 3x3-grid user interface mapping to the numerals, we end up expressing a traditional 1-9 pinpad password system. On the other, in the included example (see email), we setup the system with key_size=3. value_size=9 and used a 3x3-grid user interface with the following mapping types for each key:
+  key=0 : shape (E.g. circle, square)
+  key=1 : shape colour
+  key=2 : shape border colour
+
+The implications of adjusting the key and value set sizes will be discussed in the Mathematics section.
+
+
+
+So far, we have shown user interfaces that utilize a grid layout, and present challenges by combining the multiple visual attributes.
+We will now discuss a different of the implementation (user interface) that uses the same new blackbox and protocol we constructed earlier, a dial layout.
+
+DIAL USER INTERFACE (IMPLEMENTATION)
+====================================
+
+The dial user interface interacts with the same blackbox described previously, however, how it interprets the challenge the blackbox generates (I.e. laying each digit out around a ring as opposed to positions in a gridf) is different.
+A real-world example of this type of interface is the common combination lock, where the key size is 1 and the value size is however many positions/numbers their are around the ring on the face of the lock.
+Our implementation extends this to include multiple concentric rings (as many as there are keys), and populating the positions around the rings with the presentations mapped by the values of each key.
+The dial would have a fixed-positioned marker indicating the current challenge digit selection and the user would change what falls under this by an interaction where they rotate the rings to bring new values under the marker.
+Figure TODO illustrates an example interface of a system with key_size=2, value_size=4, and the following presentation:
+
+Key=0
+  enumeration | presentation 
+  ---------------------
+  0 | '1' (inner-ring)
+  1 | '2' (inner-ring)
+  2 | '3' (inner-ring)
+  3 | '4' (inner-ring)
+
+Key=1 
+  enumeration | presentation 
+  ---------------------
+  0 | '1' (outer-ring)
+  1 | '2' (outer-ring)
+  2 | '3' (outer-ring)
+  3 | '4' (outer-ring)
+  4 | '5' (outer-ring)
+
+
+Similar to how the grid user interface can define an arbitrary way to assign the challenge into the grid (top-left to bottom right, row-wise), the dial user interface assigns challenge digits in a clockwise from the top position. The challenge that the blackbox would have generated for the user interface to yield the presentation in figure TODO presentation would then be:
+
+  ((0,2), (1,0)), ((0,1), (1,2)),
+  ((0,3), (1,3)), ((0,0), (1,1)).
+
+
+The initial challenge digit "selected" (I.e. under the marker) would be inner-'3',outer-'1'. If the user selected this digit (by some interaction, like pressing a button embedded in the presentation) then the user interface would map this back to the enumeration domain (as in previous examples) and store the response digit (2,0).
+The user could rotate the dial to have any of the other three digits fall under the marker.
+Once the user has built up their response digits, the user interface submits the response and it is processed as described earlier (I.e. checking key-value pair matches).
+
+
+From the user's prespective, they would be unaware of the internal enumerations and keyvalue pairs.
+Here they would know their secret as a sequence of inner or outer ring numbers (E.g. outer-3, inner-2,outer-1,outer-1) and they respond by rotating the dial until the number on the appropriate disc (inner or outer) falls under the marker, to select that digit..
+
+Similar to the grid examples, nothing would prevent other presentation mappings from being used such as, but not limited to, colors, shapes, animals.
+The key and value size can also be paramaterized resulting in more/less concentric rings or objects (E.g. numbers, shapes) positioned around the rings, respectively.
+The mathematical implications of varying these values is discussed in the Mathematics section.
+It should also be noted that there is nothing preventing different ring movements when the user rotates the dial interface, such as each ring rotating in the opposite direction to adjacent rings -- in this case you would still have distinct sets of inner-outer objects on each increment of rotation.
+
+
+BLACKBOX SEQUENTIAL CHALLENGE-MODE
+==================================
+
+The numeric dial example above illustrates a potential usability issue caused by the way the blackbox generates challenges. Specifically, the numbers are in a random order around the ring. For humans, this would probably be more difficult to find their secret digit (number) on the rings compared to the numerals ordered.
+
+To accomodate this we introduce a new mode of the blackbox (protocol), where the challenge is generated by selecting a random value for each key and setting that as the first digit of the challenge. From there, each successive digit of the challenge has a key-value pair whose value is the next sequential value after the previous value for each key.
+For exmple, generating a challenge with key_size=2, value_size=4:
+
+We first pick a random value for each key of the first challenge digit. Here, 2 was chosen for the first key, and 0 for the second.
+This yields,
+  ((0,2), (1,0))
+as the first challenge digit.
+
+The next digit challenge would be the successor of that key-value,
+  ((0,3), (1,1)).
+This would continue until every challenge digit (the same as the size of the set of values for each key) has been generated producing the following challenge,
+((0,2),(1,0)), ((0,3),(1,1)), ((0,0),(1,2)), ((0,1),(1,3)).
+
+(Notice that the from the second to third digit, the value for the zero'th key wraps from the max (in this case 3) back to zero.)
+
+Figure TODO illustrates a numeric presentation mapping of this example challenge. As you can see ,this challenge generation mode will result in each ring having the numbers on them appear in their natural ordering, but the initial rotation of the rings, relative to each-other, will be random. The implications of having the blackbox in squential challenge-mode are discussed in the Mathematics section.
+
+
+
+
+BLACKBOX RELAXED VALIDATION-MODE
+================================
+The numeric dial also illustrates a second potential mode for the blackbox. Recall that the user's secret in the dial example was "...a sequence of inner or outer ring numbers...",
+We could have a second mode, where the secret is just a sequence of numbers (without ring positions).  The user interface, the challenge generation mode (either sequential, as outlined in the previous section; or random, as outlined originally), and response-generation/submission (sequence of key-value sets) would remain the same. However, we would need to have a new mode available for the blackbox, which we will call "relaced validation mode".
+The original blackbox validation mode discussed so far, checks that, for each digit in the secret, that secret digit's key-value pair existed in the corresponding response digit submitted for validation. The new mode differs in that the secret is now a value, which is then checked for existance in any of the key-value pairs submitted.
+
+For example,  using the dial layout with the marker over the topmost position and the rings moving in the same direction of rotation relative to eachother.
+Suppose we are in sequential challenge generation mode, and the key_size = 2, value_size=4, and the following challenge is generated:
+((0,2),(1,0)), ((0,3),(1,1)), ((0,0),(1,2)), ((0,1),(1,3)).
+
+For the sake of brevity, assume the users secret was only two digits:
+(0,1)
+ -- notice it is just values, not key-value pairs.
+
+TODO presentation mapping
+
+For this challenge-secret, four valid responses,
+(((0,2),(1,0)), ((0,3),(1,1))
+(((0,2),(1,0)),((0,1),(1,3)),
+
+((0,0),(1,2)), ((0,3),(1,1))
+((0,0),(1,2)), ((0,1),(1,3))
+
+which could be generated with the following interactions
+ 1a) the dial is already in a position where the outer-ring has the 0 value in the top-most position, press the select digit area.
+ 1b) rotate the dial 90 degrees counter-clockwise to have the outer-ring's 1 value in the top-most position, press the select digit area.
+
+ 1a) the dial is already in a position where the outer-ring has the 0 value in the top-most position, press the select digit area.
+ 1b) rotate the dial 90 degrees clockwise to have the outer-ring's 1 value in the top-most position, press the select digit area.
+
+ 3a) rotate the dial 180 degrees to have the inner-ring's 0 value in the top-most position, press the select digit area.
+ 3b) rotate the dial 90 degrees in clockwise to have the outer-ring's 1 value in the top-most position, press the select digit area.
+
+ 4a) rotate the dial 180 degrees to have the inner-ring's 0 value in the top-most position, press the select digit area.
+ 4b) rotate the dial 90 degrees in counter-clockwise to have the inner-ring's 1 value in the top-most position, press the select digit area.
+
+Figure TODO illustrates this example.
+
+
+
+MATHEMATICS
+===========
+The whole point of developing this new protocol and implemenations is to add protection to CRA so that it is resilliant against direct observation of a challenge-response (I.e. user entering their password). The protocol achieves this and I we have derived formulae to calculate the uncertainty of an adversary knowing the password after N arbitrary challenge-responses are observed by them for a system of arbitrary key and value sizes. If need be I can provide this information, but suffice to say, we can present an ad-hoc proof.
+Suppose we have a system with key_size=2, value_size=9 and a presentation mapping of colours and shapes.
+Now suppose the user had a one-digit length password, "bear".
+For an arbitary challenge, a coloured bear will be somewhere. When the adversary views the user selecting that challenge-digit, the adversary will not know whether or not it was chosen because of the animals colour, or because of the animal. There is marginal probabilities that enter into it as well (such as if a challenge identical to a previous viewing  happens to be generated, the adversary will know with 100% certainty).
+
+In general, 
+- as we increase the key size of the system, we decrease the reduction of uncertainty that adversary experiences after a viewing.
+- as we increase the value size of the system, we increase the initial uncertainty of the adversary after zero viewings.
+
+The validation mode outlined also affect the mathematics.
+With the relaxed-mode increasing the possible correct responses from 1 over the total number of challenge digits to key_size over the total number of challenge digits (except in the case where the same value appears in multiple keys for the same digit).
+Using the dial example, 
+Assuming, the dial was composed of 3 concentric rings (key_size=3), each with 60 positions (value_size=60).
+
+In the original validation mode (strict),
+  the probability of the adversary correctly selecting the challenge digit after 0 viewings would be 1/60.
+However, in relaxed-validation mode,
+  the probability of the adversary correctly selecting the challenge digit after 0 viewings would be,
+    in the best case 1/60, where all of the numbers align across all three rings);
+    in the worst case (3/60 => 1/20), where none of the numbers align across any of the rings.
+  The actual probablity would be a function of the number of values (more values means less probabilty of aligning with the same value on different rings),
+  we could roughly approximate and say that it would be at the median -- in this case 2/60 => 1/30
+
+
+The next section summarizes the new protocol and implementations, as well as highlights the important parts with respect to the patent application being sought.
+
+DISCUSSION
+==========
+We introduced a new CRA protocol. We leave out how one would implement setting the secret known by the blackbox since this could be done any number of ways.
+The system would be set by the developer to some key and value size, presentation mapping, and challenge-generation and blackbox validation mode.
+
+USER_INTERFACE | COMMUNICATION | BLACKBOX 
+=========================================
+...
+                   | ask challenge |
+                   |               | generate_challenge(secret)
+                   | challenge     |
+user_interaction   |               |               
+                   | response      |               
+                   |               | validate(response, secret)
+                   | YES or NO     | 
+
+ We showed how the response validation (leading to authentication) 
+
+
+
+CONCLUSION
+==========
+
+
+In this document we introduced the idea of a challenge-response authentication (CRA) protocol and walked through examples of existing systems, while defining terminology used in this domain.
+We proposed a new protocol whereby the secret space is composed of key-value pairs, eacg response digit is composed of groupings of key-value pairs (one for each key) and authentication occurs by checking for the existence of the secret-digit's key-value pair in the set of key-value pairs in the corresponding response digit.
+We discussed an alternative authentication mode whereby a response digit is valid if any of the values in the key-value pairs matches the value for the corresonding secret digit.
+We also discussed an alternative 
+
+We alluded to mathematical formulae we derived for calculating the entropy (uncertainty) preserved after viewings by an adversary and discussed the general affects of the different system parameters on the uncertainty.
+
+
+
+
+
+
+
+
+TODO - talk about strict mode
+
+in this case the challenge  set of challenge digits . Or having different speeds of rotation per ring or different
+
+
+
+
+- COULD SUPERIMPOSE GROUPINGS ONTO MAPPINGS FOR USE WITH RELAXED MODE
+
+
+
+With this layout there are two ways that the rings can operate when the user initiates a rotation interaction.
+(i) all of the rings move in the same direction of rotation,
+(ii) NOT all of the rings move in the same direction of rotation (E.g. each ring moves in the opposite rotation as the )
+
+The image (TODO) illustrates 
+
+A second implementation we have prototyped uses a different layout. Instead of a grid of objects, we construct a set of concentric rings (see dial.png image attached to email) similar to a combination lock.
+
+
+
+Each concentric disc is populated with the value elements from a key in the challenge.
+And when the entire dial is rotated, each disc rotates counter to adjacent discs.
+There will be a visual indicator (marker) showing the current challenge digit selected. 
+In the example pictured above the current challenge digit is "TODO" ordered from outermost-to-innermost ring.
+
+
+
+dials are populated using presentation encodings mappings (similar to before, this could be anything). For our example
+
+
+For example, let's define a system as we did before with a key size of 2 and value size of 4. 
+The secret-space would be:
+  (0,0), (0,1), (0,2), (0,3),
+  (1,0), (1,1), (1,2), (1,3).
+
+And let,
+  ((1,1),(0,3),(1,0),(0,1))
+, be the secret.
+
+However, the random challenge in this system can be generated in two different ways.
+  (i) as before, by grouping up random values from each key.
+    In this case, the numbers on the discs will not be sequential (they will be a random ordering).
+    The image TODO below illustrates this.
+
+  (ii) having the number ordering be sequential with respect to each disc, but have the discs rotated randomly to each other.
+    TODO talk about implication on entropy for this.
+
+
+
+
+Using a numeric presentation mapping,
+For key=0,
+enumeration (value) | presentation
+---------------------
+0 | '1'
+1 | '2'
+2 | '3'
+3 | '4'
+
+
+For key=1,
+enumeration (value) | presentation
+---------------------
+0 | '1'
+1 | '2'
+2 | '3'
+3 | '4'
+
+
+
+
+
+
+
+
+
+
+Though, for the purpose of encompassing possible derivations nothing limits the attribute types (keys: colour, shape,...) and values each key can take on.
+
+
+Nothing would prevent having a UI
+
+- mathematical properties
+- attack mitigations
+
+- generality and scope of the patent
+
+
+
+
+
+CONCLUSION
+==========
+In this document we introduced the idea of a challenge-response authentication (CRA) protocol and walked through examples of existing systems, while defining terminology used in this domain.
+We proposed a new protocol whereby the secret space is composed of key-value pairs, the response-space is composed of groupings of key-value pairs (one for each key) for each response digit, and authentication occurs by checking for the existence of the secret-digit's key-value pair in the set of key-value pairs in the corresponding response digit.
+
+Patent the protocol and implementation.
+Not as concerned with protecting the secret selection part of the implementation.
+
+
+\begin{SCRAP -layman}
+
+
+We can translate the secret used above ((1,1),(0,3),(1,0),(0,1)), with this mapping as well to obtain the presentation-encoding of the secret, 
+(green, lion, yellow, dog)
+, which is still of length four.
+
+So given the secret and challenge presented,
+
+
+
+The correct interaction to the example secret ((1,1),(0,3),(2,0),(0,1)) would be,
+((blue dog,  )
+
+
+
+The presentation rendered by the 
+
+
+Suppose we chose a key domain size of 3 and value domain size of 9, this would result in the following secret-space, with the format (key,value):
+(0,0), (0,1), (0,2), (0,3), (0,4), (0,5), (0,6), (0,7), (0,8),
+(1,0), (1,1), (1,2), (1,3), (1,4), (1,5), (1,6), (1,7), (1,8),
+(2,0), (2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (2,7), (2,8).
+
+
+- when we allow the blackbox to 
+
+
+- can omdify so the ui passes back the digit pressed from the challenge provided from the blackbox. Doesn't need to know about 
+
+In this way, each user interface does not have to have knowledge of the secret.
+
+
+
+
+
+We will begin by examining an existing password authentication example so that we can define terminology and better contrast the new protocol and implementation.
+
+A password authentication system is a type of CRA that 
+
+
+
+In general, a CRA protocol operates as follows:
+A secret exists. This secret is used to authenticate someone by their knowledge
+
+The system we propose is a new type of challenge-response based password system (CRS).
+A CRS sesion is used to authenticate a user. For each session, a challenge is presented and the user responds. If the response is correct, given some pre-determined secret (password), the user is authenticated, otherwise, they are not authentication fails. The challenge-space is the same as the secret-space and is the set of all possible response-digits that can be generated by the user interacting with the challenge (E.g. touching/clicking a button on the challenge interface). 
+
+
+The challenge may be static 
+The blackbox may or may not 
+
+The user interface is responsible for presenting the challenge and generating a response based upon user interaction with the challenge presented and sending it to a blackbox. The blackbox is responsible for generating challenges, knowing the secret, and validating a response provided by the user interface. The user interface does not have knowledge of the secret. In many instances, the blackbox is physically separated from the user interface (I.e. a point-of-sale (POS) interac terminal in a restaurant) or in other cases is a separate, trusted code module. However, for the sake of generality, nothing prevents the user interface from being separate from the user interface. In the POS example, we see that sometimes the
+
+
+
+We will examine a traditional, numeric pinpad (with the digits '1' through '9') to illustrate the terminology defined above.
+In this example, the challenge presented is composed of nine digits, which contain the numerals '1' through '9' arranged in a 3x3 grid. The challenge is static, meaning that each time it is presented, it is in the same configuration (spatial arrangement). 
+
+The challenge-space and secret-space is: {'1','2','3','4','5','6','7','9'}.  The secret in this system would be a sequence of N digits, taken from the secret-space. For example, where N=4, one valid secret could be S={'1','2','5','6'}. The correct response to the challenge, given the secret S, would be the user selecting the digits in the challenge containing the secret (in the same order). (And possibly pressing a submit button, but nothing would limit a password system from accepting on a predeteremined password length without a submit interation.)
+
+
+There is nothing preventing us from deriving a new system based on this, but instead using another type of object other than numerals in this system. For example, the challenge/secret-space could be pictures of animals, such that:
+challenge-space = secret-space = {cat, dog, mouse, lion, giraffe, zebra, tiger, snake, turtle}.
+
+The challenge would again be a 3x3 grid the same size as the challenge space (9), however, this time it would be populated with the animals (I.e. cat where 1 was, dog where 2 was, ...).
+The same secret S={'1','2','5','6'}  before would become {cat,dog,giraffe,zebra}. And the correct response to a challenge would be the the user generating a response by pressing the challenge-digits {cat,dog,giraffe,zebra} (in that order).
+
+It should now be apparent that we can generalize the above two examples into one password system by enumerating the challenge/secret-spaces and defining a mapping from the enumeration to the objects the user interface uses in the challenge being presented.
+We define the size of the space to be 9. And then define a mapping for each element.
+For example the numerals mapping would be (enumerating from zero),
+
+enumeration | mapping 
+---------------------
+0 | '1'
+1 | '2'
+2 | '3'
+3 | '4'
+4 | '5'
+5 | '6'
+6 | '7'
+7 | '8'
+8 | '9'
+
+, and the animals mapping would be,
+
+enumeration | mapping 
+---------------------
+0 | cat
+1 | dog
+2 | mouse
+3 | lion
+4 | giraffe
+5 | zebra
+6 | tiger
+7 | snake
+8 | turtle
+
+. Internally, the user interface would generate challenge using the enumeration, and then apply whatever mapping was defined. However, the user interface would map the user response back to the enumeration.
+Using the animals challenge example, if the user selected the dog, that response digit stored by the user interface would be the enumerated value 1 (since dog==1).
+In this way the blackbox does not need to concern itself with the mapping and can store secrets by their enumerated values (I.e. {1,2,5,6}) and validate the incoming responses directly since they will be composed of the same enumerated values.
+
+Using the same running example,
+Suppose the blackbox already has the secret set to {1,2,5,6}.
+
+When a user is to be authenticated, the blackbox would generate the challenge
+1 | 2 | 3
+----------
+4 | 5 | 6
+----------
+7 | 8 | 9
+, which it would send to the user interface
+
+
+
+\begin{Related Work}
+Some systems provided an impeded observation. This can be done in different ways, for example, the screen on which the challenge is presented could be obscured in some way. Other systems use challenges composed of different sensory channels (E.g. aural, haptic), 
+an example of this a system [TODO - find papers on this].
+
+Other systems use secondary secrets that affect the response to a given challenge. An example of this is [TODO - paper on direction + number] , []
+
+The most closely related system to our proposal is a mosaic [TODO -check if this is the porper name]  graphical password system. In a common implementation, the user is presented with an image containing a collection of objects over some static background image.
+A digit of the user's secret is one of the objects present in the mosaic and the user selects near that object. When the objects in the challenge are in close proximity nearby, an adversary may not be able to distinguish which object the user was selecting.
+
+
+\begin{Methodology}
+
+\begin{Theory}
+
+\begin{Implementation}
+dsads
+
+\begin{Usability Study}
+The goal is to test how easy it is to enter a random passsword of a common password length for the control system (4 digits).
+
+
+
+
+\begin{RESULTS \& DISCUSSION}
+
+In a challenge-response system the 
+These numbers can be paramaterized to influence the potency and duration
+
+$f(x)=$, where $x$ is the number of challenge-responses the adversary has observed.
+
+In our view, a traditional numeric pin password system can be thought of as having one attribute type (numerals) composed of the numerals on the pinpad (I.e. 1 through 9).
+
+We impose a condition that the each set of attributes per attribute type is constant, that is,
+$\forall a_0 \in A \forall a_1 \in A : |a_0| = |a_1|$, where $A$ is the set of all attribute type sets.
+
+\[   \left\{
+\begin{array}{ll}
+      0 & x\leq a \\
+      \frac{x-a}{b-a} & a\leq x\leq b \\
+      \frac{c-x}{c-b} & b\leq x\leq c \\
+      1 & c\leq x \\
+\end{array} 
+\right. \]
+
+\begin{lstlisting}[numbers=none]
+PARTIAL(missing, key, val, grid, depth) := 
+	IF missing == 0: 
+		$((1 / val) ^ (key - (missing + 1))) / depth$
+	ELIF missing == 1: 
+		((1 / val) ^ (key - (missing + 1))) * (1-(1 / val)) * (1 / (depth + 1))
+    ELSE
+        ((1 / val) ^ (key - (missing + 1))) * (1-(1 / val)) * (WRAPPER(missing, val - 1, grid - 1, depth + 1))
+    END
+END
+
+
+WRAPPER(key, val, grid, depth) := 
+	IF (val=0 || grid=1): 
+		return 1/depth;
+	ELSE: 
+		sumof[i=0,key-1](PARTIAL(i, key, val, grid, depth)) 
+	END
+END
+\end{lstlisting}
+
+FUTURE WORK
+
+CONCLUSION
+
+REFERENCES
+@inproceedings{altiok2014graphneighbors,
+  title={GraphNeighbors: Hampering Shoulder-Surfing Attacks on Smartphones.},
+  author={Altiok, Irfan and Uellenbeck, Sebastian and Holz, Thorsten},
+  booktitle={Sicherheit},
+  pages={25--35},
+  year={2014}
+}
+
+\end{document}

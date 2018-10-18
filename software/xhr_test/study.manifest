@@ -1,0 +1,102 @@
+1
+1
+remote
+1
+other
+off
+static
+Before we begin, you must complete this consent form.
+consent.htm
+T0S0
+T0S0
+T0S_2,0,>
+2
+other
+off
+static
+You will now be given instruction on the first password system. Use the "Next" and "Prev" buttons to navigate the instructions and click "Done" when you are finished.
+instructionNumericStatic.htm
+T0S0
+T0S0
+T0S_2,0,>
+3
+grid-numeric
+on
+static
+You will now be given training on the first password system. The training will finish when you submit the correct password three times.
+section.htm
+T0S_2,0,>
+T0S_2,0,>
+T0S_1,2,>
+4
+grid-numeric
+on
+static
+You will now enter an evaluation phase. This is identical to the training phase, except it will last 10 minutes.
+section.htm
+T0S1
+T0S_2,0,>
+T10S1
+5
+other
+off
+static
+You will now be given instruction on the second password system. Use the "Next" and "Prev" buttons to navigate the instructions and click "Done" when you are finished.
+instructionNumericRandom.htm
+T0S0
+T0S0
+T0S_2,0,>
+6
+grid-numeric
+on
+random
+You will now be given training on the second password system. The training will finish when you submit the correct password three times.
+section.htm
+T0S_2,0,>
+T0S_2,0,>
+T0S_1,2,>
+7
+grid-numeric
+on
+random
+You will now enter an evaluation phase. This is identical to the training phase, except it will last 10 minutes.
+section.htm
+T0S1
+T0S_2,0,>
+T10S1
+8
+other
+off
+static
+You will now be given instruction on the final password system. Use the "Next" and "Prev" buttons to navigate the instructions and click "Done" when you are finished.
+instructionGrid.htm
+T0S0
+T0S0
+T0S_2,0,>
+9
+grid
+on
+random
+You will now be given training on the final password system. The training will finish when you submit the correct password three times.
+section.htm
+T0S_2,0,>
+T0S_2,0,>
+T0S_1,2,>
+10
+grid
+on
+random
+You will now enter an evaluation phase. This is identical to the training phase, except it will last 10 minutes.
+section.htm
+T0S1
+T0S_2,0,>
+T10S1
+11
+other
+on
+static
+You will now be asked to complete a short survey. This will help us understand our data better.
+survey.htm
+T0S0
+T0S0
+T0S_0,0,>

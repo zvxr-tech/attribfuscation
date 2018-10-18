@@ -1,0 +1,348 @@
+
+################################################################################
+# Session Telemetry Data File
+################################################################################
+
+file:
+	[ magicnum | ssid | len | sections ]
+
+sections: (bufferStore)
+	[ section1 | section2 | ... ]
+
+section:
+	[magicnum | sid | len | registers | len | buffers ]
+	register length is the number of registers
+	buffers length is the number of buffers used for the section.
+
+registers:
+	[ reg1 | reg2 | ... ]
+
+reg: 2 bytes
+	The value of that  register.
+
+buffers: 
+	[type | len | buffer || type | len | buffer | ... ]
+	buffer length is in 2byte segments
+
+buffer: 
+	[ element | element | ... ]
+
+len: 4 bytes
+	len_lo | len_hi
+
+len_hi: 2 bytes
+	High bytes of length in units of items (not necessarily bytes)
+
+len_lo: 2 bytes
+	Low bytes of length, in units of items (not necessarily bytes)
+
+magicnum: 4bytes
+	[version | reserved]
+
+version: 2bytes
+
+reserved 2bytes
+	
+type: 2 bytes
+	The buffer type
+
+element: 2 bytes
+	The elements contain data that is format in the context of the buffer type
+
+ssid: 2 bytes
+	Session ID
+
+sid: 2 bytes
+	Section ID (section IDs do not necessarly have to correspond to the order in which they were run)
+
+################################################################################
+## Buffer Types
+################################################################################
+
+Buffer can be of the type { BUFFER_TY_TELE=1 , BUFFER_TY_ACTION=2 , BUFFER_TY_EVENT=3}
+
+TELE: 8 bytes
+	[ time | X | Y ]
+
+########################################
+ACTION: 10 bytes
+	[ time | X | Y | type | data ]
+
+type: 2 bytes
+	ACTION_TY_ERROR (0)
+	ACTION_TY_DIGIT (1)
+	ACTION_TY_OTHER (2)
+
+data: 2 bytes
+	Depends on the value of the buffer type,
+	
+	if type == ACTION_TY_ERROR (0):
+		data is currently unused (0).
+
+	if type == ACTION_TY_DIGIT (1):
+		data := the digit in the challenge selected  (see secret data format)
+
+	if type == ACTION_TY_OTHER (2):
+		data := DATA_DT_EMPTY
+
+DATA_DT_EMPTY:
+	0
+
+########################################
+EVENT: variable length
+	[ time | X | Y | type | len | buffer ]
+
+	The event type will determine the the structure of the data in the buffer as well
+	as the domain of the timestamp (I.e. relative to document creation, or relative to UNIX epoch). 
+	(see comments in Telemeter section for more details.)
+
+	X:
+		X coordinates of mouse, relative to Page X (see Mozilla Dev. Network documentation)
+
+	Y:
+		Y coordinates of mouse, relative to Page X (see Mozilla Dev. Network documentation)
+
+	time:
+		[ time_lo | time_hi ]
+
+	time_hi: 2 bytes
+		High bytes of a 4 byte timestamp
+
+	time_lo: 2 bytes
+		Low bytes of a 4 byte timestamp
+
+	len: 2 bytes
+		length in units of items (not necessarily bytes)
+		NOTE: THE WIDTH (2bytes) IS DIFFERENT TO ALMOST EVERY OTHER LENGTH WIDTH IN SPECS
+
+	type:
+		########################################
+		EVENT_TY_ERROR (0);
+
+			len:=0
+			buffer is unused.
+
+		########################################
+		EVENT_TY_NEWSECRET (11):
+			This is a flattened array defined, A[digit], whose length is the number of digits
+	 		in the secret.
+	 		Where the digit is the position in the secrets natural ordering and  the value the 
+	 		array element holds is an encoding Enc(key,val):=key*(|val|) + val), where key and val are both zero-indexed, resulting in a zero-indexed encoding as well. 
+	 		Each array element is 2bytes in length.	 		
+
+	 		For example, 
+	 			The secret array: [12,24],
+	 				with a system key size of 3 and value size of 9,
+	 			would be decoded as: [(k=1, v=3), (k=2, v=6).
+
+	 
+	 	########################################
+		EVENT_TY_NEWCHALLENGE (12):
+			This is a flattened array defined, A[digit][key], whose length is |digit|*|key|.
+			Where the digit is the position in the challenge grid and the key is the attribute key,
+			and the value the array element holds is the key's value for that particular challenge digit. Each array element is 2bytes in length.
+			Where the value is indexed from zero, however, keeping in mind that the zero'th index hold the sentinal value of each key.
+
+			For example, 
+	 			The challenge array: [[1,2], [3,3], [2,1]],
+	 				with a system key size of 2 = {fg color, bg color}, and 
+	 				value size of 3 = {red,green,blue},
+	 			would be decoded as: {(fg-red, bg-green), (fg-blue, bg-blue), (fg-green, bg-red)}
+
+	 
+	 	########################################
+		EVENT_TY_SUBMIT (13):
+			This is a flattened array defined, A[digit], whose length is the number of digits
+			the response being submitted. Which is prepended with the validity of the submission (0=invalid, 1=valid).
+			Where the digit is the position in the challenge response and the value the array 
+			element holds is the challenge position of that response digit selection (indexed from zero).
+			Each array element is 2bytes in length.
+
+			For example, 
+	 			Assume a challenge array: [[1,2], [3,3], [2,1]],
+	 				with a system key size of 2 {fg color, bg color}, and 
+	 				value size of 3 {red,green,blue},
+	 			The submission array data: 
+	 				[1,2,3] 
+	 			
+	 			would be decoded as: 
+	 				Successful submission (Ack'd by the blackbox).
+	 				The first digit of the repsonse is the third digit of the challenge (fg-red, bg-green).
+	 				The second digit of the repsonse is the fourth digit of the challenge. (fg-green, bg-red)		
+
+	 	########################################
+		EVENT_TY_RESPONSECLEAR (14):
+			Occurs when the challenge response is cleared.
+			len:=0
+			buffer is unused.
+
+		########################################
+		EVENT_TY_ACTIVATION (42):
+			Occurs when the Telemeter is activated.
+			len:=0
+			buffer is unused.
+
+		########################################
+		EVENT_TY_DEACTIVATION (43):
+			Occurs when the Telemeter is deactivated.
+			len:=0
+			buffer is unused.
+
+		########################################		
+		EVENT_TY_ACTIVATIONCHANGE (44):
+			Occurs when the Telemeter is activated or deactivated.
+			len:=0
+			buffer is unused.
+
+		########################################		
+		EVENT_TY_OTHERDATA (45):
+			Occurs when a form submission is made under the 'other' system type.
+			This will hold a UTF-8 encoded serialization of a form.
+			The serialization format is (newline delimited):
+				form.elementName1\n
+				form.elementValue1\n
+				form.elementName2\n
+				form.elementValue2\n
+				...
+				form.elementNameN\n
+				form.elementValueN\n
+
+			Ex.
+				otherDataAgeNumber\n
+				42\n
+				otherDataCountryText\n
+				Canada\n
+				...
+				otherDataComment\n
+				The red dog.\n
+		
+		########################################
+		EVENT_TY_TIMESYNC (46)
+			This event occurs once and is used to synchronize the two time domains by logging
+			two (near... ~+-5ms) simultaneous events in each domain.
+			The timestamp will be in the event time domain -- what clicks and mouse movements are (user-generated actions->events).
+			Two 2byte data fields encode (LSB) the timestamp in the unix timestamp domain.
+
+			** For now, everything is set to log in the unix timestamp domain, this event is legacy **
+
+		########################################
+		EVENT_TY_CTLRESET (47)
+			This event occurs when the controller's uiType is not 'other' and the controller is reset.
+			The data logged will be the parameters used to instantiate the controller laid out as follows:
+				keySize
+				valSize
+				uiType\n 
+				challengeMode\n
+				challengeChallengeDimX
+				challengeChallengeDimY
+				challengeChallengeResX
+				challengeChallengeResY
+				challengeResponseDimX
+				challengeResponseDimY
+				challengeResponseResX
+				challengeResponseResY
+				secretChallengeDimX
+				secretChallengeDimY
+				secretChallengeResX
+				secretChallengeResY
+				secretResponseDimX
+				secretResponseDimY
+				secretResponseResX
+				secretResponseResY
+				secretSizeMin
+				secretSizeMax
+			, where all items are 2 byte wide numbers, except for uiType and challengeMode, which are ASCII character encodings stored in 2byte wide. And they are delimited from eachother by a newline character.
+
+			NOTE: uiType and challengeMode cannot have newlines in the value strings themselves.
+
+
+################################################################################
+# Manifest File
+################################################################################
+file:
+	version\n
+	output_type\n
+	session_id\n
+	telemetry_flag\n
+	challenge_mode\n
+	html\n
+	new_challenge_condition\n
+	new_secret_condition\n
+	end_condition
+
+version:
+	Numeric (max 2^16 - 1). Must match the version of Session class.
+
+output_type:
+	'none' - telemetry data is not saved when the session ends.
+	'local' - not supported.
+	'remote' - telemetry data is saved to a remote service (E.g. XHR)
+
+session_id:
+	Numeric (max 2^16 - 1)
+
+telemetry_flag:
+	'on' - telemetry is enabled
+	'off' - telemetry is disabled
+	
+challenge_mode:
+	'static' - the challenge is not permuted.
+	'random'  - the challenge is randomly permuted.
+
+
+new_challenge_condition:
+	The condition that causes a new challenge to be generated.
+
+new_secret_condition:
+	The condition that causes a new secret to be generated.
+
+end_condition:
+	The condition that causes a the current section to end. Control returns to the Session instance.
+
+########################################
+Conditions contain information telling if it is timer based and an expression that evaluates to a false (zero) or true (not-zero). 
+If the condition is timer-based, the expression is evaluated when the timer alarms.
+Otherwise the expression is evaluated when a submission is made to the challenge-response system.
+In either case, if the expression evaluates to true, the condition is satisified and the associated event is triggered.
+
+	Tabc
+		a: a sequence of numerals (0-9) representing the timer in seconds (0 = timer disabled)
+		b: either S (strict) or L (loose). This is currently unused.
+		c: EXPRESION
+
+	For example, 
+		T30S1 means: In strict mode, evaluate the expression "1", after 30 seconds.
+	
+
+Where the EXPRESION is a Reverse-Polish notation encoded expression, where
+the operators used are:
+Arithmetic
+	+
+	-
+	/
+	*
+Logical (true=1, false=0)
+	!	negate op1
+	&	op1 AND op2
+	|	op1 OR op2
+	<	op1 less that op2
+	>	op1 greater that op2
+	=	op1 equal to op2
+
+, and the operands are,
+
+	123456789	Immediate value
+	_123456789	Register value (this causes the register indexed by the numeral value to be used). 				Register value is a single digit.
+
+, and where operands and operators, are delimited by commas amongst themselves, and eachother.
+	
+For example,
+
+	32,44,+
+		76
+	
+	32,44,+,12,65,<
+		1
+	
+	32,44,+,12,65,<,!
+		0

@@ -1,0 +1,112 @@
+<div>
+	<center>
+		<!-- Instruction for Numeric grid (random) implementation (c)Mike Clark - 2017-->
+		<div>
+			<div style="width: 420px">
+				<button style="width: 100%" id="submitResponseButton">Done</button>
+				<br />
+				<button id="prev" style="width: 49%; margin: 0; padding: 0; border: 1px solid black;" disabled="true"onclick="(function(evt, that){ 
+						var fbElem = document.querySelectorAll('div#flipbook div.page');
+						if (!fbElem || fbElem[0].style.display != 'none')  
+							return false;
+						that.nextElementSibling.disabled = false;
+						for (var i = 1; i < fbElem.length; i++) {
+							if (fbElem[i].style.display != 'none') {
+								fbElem[i].style.display = 'none';
+								fbElem[i - 1].style.display = 'block';
+								if (i == 1) 
+									that.disabled = true;
+							}
+						}
+					})(event, this);">
+					Prev
+				</button> 
+				<button id="next" style="width: 49%; margin: 0; padding: 0; border: 1px solid black;" onclick="(function(evt, that){ 
+						var fbElem = document.querySelectorAll('div#flipbook div.page');
+						if (!fbElem || fbElem[fbElem.length - 1].style.display != 'none')  
+							return false;
+						that.previousElementSibling.disabled = false;
+						for (var i = fbElem.length - 2; i >= 0; i--) {
+							if (fbElem[i].style.display != 'none') {
+								fbElem[i].style.display = 'none';
+								fbElem[i + 1].style.display = 'block';
+								if (i ==  fbElem.length - 2) 
+									that.disabled = true;
+							}
+						}
+				})(event, this);">
+					Next
+				</button>
+			</div>
+			<div style="width:420px;" id="flipbook">
+				<div class="page" id="page00" style="display: block">
+					
+						<p>
+							This password system uses a numeric challenge grid (top) containing the numerals <b>1</b> through <b>9</b>, however, for each challenge, the numerals will be randomly ordered.
+							<br />
+							The password is shown at the bottom and it will always be four digits in length, composed of numerals present in the challenge.
+							<br />
+							Your task is to enter the password shown by clicking the elements of the challenge grid.
+						</p>
+						<img style="border: 2px white dashed"  src="img/2_0.png" />
+				</div>
+
+				<div class="page" id="page0" style="display: none">
+					
+					<p>
+						The password in this example is {<b>4</b>,<b>7</b>,<b>3</b>,<b>9</b>}.
+					</p>
+					<img style="border: 2px white dashed"  src="img/2_0.png" />
+				</div>
+				<div class="page" id="page1" style="display: none">
+					
+					<p>
+						You would first select the <b>4</b> by clicking the square containing that numeral,<br />
+						since <b>4</b> is the first digit of the password.
+					</p>
+					<img style="border: 2px white dashed"  src="img/2_1.png" />
+				</div>
+				<div class="page" id="page2" style="display: none">
+					
+					<p>
+						Followed by the <b>7</b>, <b>3</b>, and <b>9</b>.<br />
+						When you are ready to submit the password, click the <span style="color:green; weight:bold;">SUBMIT</span> button.
+					</p>
+					<img style="border: 2px white dashed"  src="img/2_4y.png" />
+				</div>
+				<div class="page" id="page3" style="display: none">
+					
+					<p>
+						If you enter the correct password,
+						<font color="green">Correct</font> will be displayed
+						for 0.5 seconds, after which a new challenge and password will then be presented.
+					</p>
+					<img style="border: 2px white dashed"  src="img/2_4ye.png" />
+				</div>
+				<div class="page" id="page4" style="display: none">
+					
+					<p>
+						Otherwise, <font color="red">Incorrect</font> will be displayed
+						for 0.5 seconds. The challenge and password will remain the same.
+					</p>
+					<img style="border: 2px white dashed"  src="img/2_4ne.png" />
+				</div>
+				
+				<div class="page" id="page5" style="display: none">
+					
+					<p>
+						If you exceed the password length limit of 4, a message will be displayed for 0.5 seconds.<br />
+						If you make a mistake, you can clear your response by clicking the <span style="color:red; weight:bold;">CLEAR</span> button.
+					</p>
+					<img style="border: 2px white dashed"  src="img/2_4le.png" />
+				</div>
+
+				<div class="page" id="page6" style="display: none">
+					<p>
+						This concludes the instructions. Please click <b>DONE</b> to continue.
+					</p>
+				</div>
+			</div>
+		</div>	
+	</center>
+</div>

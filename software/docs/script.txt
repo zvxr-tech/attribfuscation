@@ -1,0 +1,93 @@
+=====
+TODO intro
+--
+The password is {<b>1</b>,<b>3</b>,<b>1</b>,<b>2</b>} and the challenge is the grid of numerals (1 through 9).
+--
+You would first select the <b>1</b> by clicking the square containing that numeral.
+--
+Followed by the <b>3</b>, <b>1</b>, and <b>2</b>.
+--
+When you are ready to submit the password, click the submit button.
+=====
+TODO intro
+--
+The password is {<b>7</b>,<b>1</b>,<b>5</b>,<b>7</b>} and the challenge is the grid of numerals (1 through 9). However, the numerals in the grid are scrambled each challenge.
+--
+You would first select the <b>7</b> by clicking the square containing that numeral.
+--
+Followed by the <b>1</b>, <b>5</b>, and <b>7</b>.
+--
+When you are ready to submit the password, click the submit button.
+=====
+TODO intro
+Where each object in the challenge has three attributes: exterior-colour, interior-colour, and shape. The three attributes can take on one of nine distinct attributes.
+--
+The password is {<b>vertical-rectangle</b>,<b>green-exterior</b>,<b>diamond</b>,<b>white-interior</b>} and the challenge is the grid of objects with unique exterior-colour, interior-colour, and shape attributes.
+--
+You would first select the 
+<b>vertical-rectangle</b> with <b>orange-exterior</b> and <b>white-interior</b>,
+since the first password digit is the shape attribute: <b>vertical-rectangle</b>.
+Followed by the <b>left-triangle</b> with <b>green-exterior</b> and <b>green-interior</b>,
+since the second password digit is the exterior-colour attribute: <b>green</b>.
+--
+Followed by the <b>diamond</b> with <b>cyan-exterior</b> and <b>blue-interior</b>,
+since the third password digit is the shape attribute: <b>diamond</b>.
+--
+Followed by the <b>horizontal-rectangle</b> with <b>orange-exterior</b> and <b>white-interior</b>,
+since the fourth password digit is the interior-color attribute: <b>diamond</b>.
+--
+When you are ready to submit the password, click the submit button.
+==========
+If you enter the correct password,
+<font color="green">Correct</font> will be displayed
+for 0.5 seconds. A new challenge and password will then be presented.
+==
+Otherwise, <font color="red">Incorrect</font> will be displayed
+for the 0.5 seconds. The challenge and password required will not change.
+==
+If you exceed the password length limit of 4,
+a message informing you will be displayed for 0.5 seconds.
+==
+If you make a mistake, you can clear your response by selecting this button.
+
+
+===================================================
+
+
+Welcome to a graphical password usability study.
+Before you begin the study, your consent is required.
+
+==
+
+You will now be given instruction for the first password system.
+
+You will now begin the training phase of the first password system.
+After you submit two correct passwords this phase will end.
+
+You will now begin the evaluation phase of the first password system.
+This phase will last 10 minutes.
+
+==
+
+You will now be given instruction for the second password system.
+
+You will now begin the training phase of the second password system.
+After you submit two correct passwords this phase will end.
+
+You will now begin the evaluation phase of the second password system.
+This phase will last 10 minutes.
+
+==
+
+You will now be given instruction for the third password system.
+
+You will now begin the training phase of the third password system.
+After you submit two correct passwords this phase will end.
+
+You will now begin the evaluation phase of the third password system.
+This phase will last 10 minutes.
+
+==
+
+You will now be asked to complete a short questionnaire.
+A short questionnaire will now be administered.

@@ -1,0 +1,100 @@
+<div><!--Placeholder study Consent Form - to avoid consfusion, the consent form used for the approved study is available separately in the project subdirectory 'docs' (c) Mike Clark - 2017-->
+<style type="text/css">  	
+@page {  }  body {color:black; background-color:white;} 	
+.greenbutton {
+
+    margin-left: 5%;
+    background-color: #2ecc71;
+    display: inline-block;
+    width: 35%;
+    max-width: 130px;
+    height: 40px;
+
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.greenbutton:active {
+    background-color: #48E68B;
+}
+
+.greenbutton:focus { outline:0;}
+
+.redbutton {
+    margin-right: 5%;
+    background-color: #e74c3c;
+    display: inline-block;
+    width: 35%;
+    max-width: 130px;
+    height: 40px;
+
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.redbutton:active {
+    background-color: #FF6656;
+}
+
+.redbutton:focus { outline:0;}
+
+.P13 { font-size:12pt; text-align:left ! important; font-family:Times New Roman; writing-mode:lr-tb; margin-top:0cm; margin-bottom:0.423cm; }  	
+.P26 { font-size:11pt; font-style:italic; text-align:left ! important; font-family:Arial; writing-mode:lr-tb; }
+</style>
+
+<div>
+	<p>  	
+		<b>This is where you would place a consent form for the study.<br />
+		It would contain information such as:</b>
+		<ul>
+			<li>Name of Researcher, Faculty, Department, Telephone &amp; Email</li>
+			<li>Sponsor (e.g. NSERC)</li>
+			<li>Purpose of the Study</li>
+			<li>What Will I Be Asked To Do?</li>
+			<li>What Type of Personal Information Will Be Collected?</li>
+			<li>Are there Risks or Benefits if I Participate?</li>
+			<li>What Happens to the Information I Provide?</li>
+			<li>Questions/Concerns Contact Information</li>
+		</ul>
+	</p>
+	<p>
+		<b>Followed by a confirmation checkbox and buttons to proceed/cancel/print:</b>
+	</p>
+</div>
+
+<p class="P13">  	
+<form id="otherDataForm" name="otherDataForm">
+<input type="checkbox" id="otherDataValidHidden" name="otherDataValidHidden" value="false" onchange="document.getElementById('submitResponseButton').disabled = !this.checked; this.value = this.checked ? 'true' : 'false';" />  	
+
+<span><span class="T26">By checking this box,<br/>  	
+         1) You understand to your satisfaction the information provided to you about your participation in this research project, and <br/> 
+         2) you agree to participate in the research project.  	
+</span></span>  	
+</form>
+</p>  	
+<div class="P13"><br /><br /><center>
+	<button class="redbutton" onclick="alert('If you wish to terminate the session without submitting the anonymized data, close the webpage. THIS IS IRREVERSIBLE');" id="clearResponseButton">I DO NOT CONSENT</button>
+	<button class="greenbutton" id="submitResponseButton" onclick="
+						if (document.getElementById('otherDataValidHidden').value != 'true') {
+					  		alert('Please click the checkbox above.');
+					  	}">I DO CONSENT</button> 	
+	<br /><br /><button id="printButton" onclick="window.print();">Print</button>
+</center></div>  	
+</div>  
+<script type="text/javascript">  	
+document.getElementById("otherDataValidHidden").checked = false;  	
+
+</script>  	
+</div>

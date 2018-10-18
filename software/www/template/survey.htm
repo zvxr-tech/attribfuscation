@@ -1,0 +1,134 @@
+<div>
+	<!--Study Survey (c) Mike Clark - 2017-->
+	<style type="text/css">
+		body {background-color: #eeeeee; color: #010101;}
+	</style>
+	<h1>
+		Study Survey
+	</h1>
+	We need to collect demographic information to help us understand the data we gathered. We also ask about your experience and solicit comment.
+	<form id="otherDataForm" name="otherDataForm">
+		<hr />
+		<h3>
+			Age
+		</h3>
+		<input required type="number" name="otherDataAgeNumber" id="otherDataAgeNumber" min="18"  value="" />
+		
+		<h3>
+			Sex
+		</h3>
+		<input required name="otherDataSexRadioGroup" id="otherDataSexRadioFemale" type="radio" value="F" />
+		Female
+		<br />
+		<input required name="otherDataSexRadioGroup" id="otherDataSexRadioMale" type="radio" value="M" />
+		Male
+		<br />
+
+		<h3>
+			What is your profession, or field of study if you are a student?
+		</h3>
+		<input required id="otherDataProfessionText" name="otherDataProfessionText" type="text" maxlength="256" />
+		<br />
+
+		<h3>
+			Country of Residence
+		</h3>
+		<input required id="otherDataCountryText" name="otherDataCountryText" type="text" maxlength="256" />
+		<br />
+		
+		<h3>
+			Prior to this session, how many times have you completed this study?
+		</h3>
+		<input required name="otherDataFamiliaritySelectRadioGroup" id="otherDataFamiliaritySelectRadioNumber" type="radio" value="number" />
+		Exactly  			
+		<input type="number" name="otherDataFamiliarityNumber" id="otherDataFamiliarityNumber" value="0" width="2" />
+		times. 			
+		<br />
+		<br />
+		<b>Or, if you cannot remember exactly how many times, approximate:</b>
+		<br />
+		<input name="otherDataFamiliaritySelectRadioGroup" id="otherDataFamiliarityRadio1" type="radio" value="1,5" />
+		1 to 5
+		<br />
+		<input name="otherDataFamiliaritySelectRadioGroup" id="otherDataFamiliarityRadio2" type="radio" value="6,10" />
+		6 to 10
+		<br />
+		<input name="otherDataFamiliaritySelectRadioGroup" id="otherDataFamiliarityRadio3" type="radio" value="11,15" />
+		11 to 15
+		<br />
+		<input name="otherDataFamiliaritySelectRadioGroup" id="otherDataFamiliarityRadio4" type="radio" value="16,20" />
+		16 to 20
+		<br />
+		<input name="otherDataFamiliaritySelectRadioGroup" id="otherDataFamiliarityRadio5" type="radio" value="20,INF" />
+		20+ 			times.
+		<br />
+		<h3>
+			Before this study, how often have you used a 1-9 numeric password system?
+		</h3>
+		<input required name="otherDataFamiliarityPastNumericRadioGroup" id="otherDataFamiliarityPastNumericRadio1" type="radio" value="Never" />Never<br />
+		<input name="otherDataFamiliarityPastNumericRadioGroup" id="otherDataFamiliarityPastNumericRadio2" type="radio" value="A few times a year or sporadically" />A few times a year or sporadically<br />
+		<input name="otherDataFamiliarityPastNumericRadioGroup" id="otherDataFamiliarityPastNumericRadio3" type="radio" value="A few times a month" />A few times a month<br />
+		<input name="otherDataFamiliarityPastNumericRadioGroup" id="otherDataFamiliarityPastNumericRadio4" type="radio" value="A few times a week" />A few times a week<br />
+		<input name="otherDataFamiliarityPastNumericRadioGroup" id="otherDataFamiliarityPastNumericRadio5" type="radio" value="Almost every day or more" />Almost every day or more<br />
+		<br />
+		<h3>
+			Before this study, how often have you used a randomized, 1-9 numeric password system?
+		</h3>
+		<input required  name="otherDataFamiliarityPastRndNumericRadioGroup" id="otherDataFamiliarityPastRndNumericRadio1" type="radio" value="Never" />Never<br />
+		<input name="otherDataFamiliarityPastRndNumericRadioGroup" id="otherDataFamiliarityPastRndNumericRadio2" type="radio" value="A few times a year or sporadically" />A few times a year or sporadically<br />
+		<input name="otherDataFamiliarityPastRndNumericRadioGroup" id="otherDataFamiliarityPastRndNumericRadio3" type="radio" value="A few times a month" />A few times a month<br />
+		<input name="otherDataFamiliarityPastRndNumericRadioGroup" id="otherDataFamiliarityPastRndNumericRadio4" type="radio" value="A few times a week" />A few times a week<br />
+		<input name="otherDataFamiliarityPastRndNumericRadioGroup" id="otherDataFamiliarityPastRndNumericRadio5" type="radio" value="Almost every day or more" />Almost every day or more<br />
+		<br />
+		<h3>
+			Before this study, how often have you used an alternative password system (e.g. pattern unlock, image association)?
+		</h3>
+		<input required name="otherDataFamiliarityPastAlternativeRadioGroup" id="otherDataFamiliarityPastAlternativeRadio1" type="radio" value="Never" />Never<br />
+		<input name="otherDataFamiliarityPastAlternativeRadioGroup" id="otherDataFamiliarityPastAlternativeRadio2" type="radio" value="A few times a year or sporadically" />A few times a year or sporadically<br />
+		<input name="otherDataFamiliarityPastAlternativeRadioGroup" id="otherDataFamiliarityPastAlternativeRadio3" type="radio" value="A few times a month" />A few times a month<br />
+		<input name="otherDataFamiliarityPastAlternativeRadioGroup" id="otherDataFamiliarityPastAlternativeRadio4" type="radio" value="A few times a week" />A few times a week<br />
+		<input name="otherDataFamiliarityPastAlternativeRadioGroup" id="otherDataFamiliarityPastAlternativeRadio5" type="radio" value="Almost every day or more" />Almost every day or more<br />
+		<br />
+		<h3>During this study session were you using touch or a mouse?</h3>
+		<input required name="otherDataInputTypeRadioGroup" id="otherDataInputTypeRadio1" type="radio" value="Touch" />Touch<br />
+		<input name="otherDataInputTypeRadioGroup" id="otherDataInputTypeRadio2" type="radio" value="Mouse" />Mouse<br />
+		<h3>
+		Which best describes the device you accessed this study from:
+		</h3>
+		<input required name="otherDataDeviceTypeRadioGroup" id="otherDataDeviceTypeRadio1" type="radio" value="Desktop" />Desktop<br />
+		<input name="otherDataDeviceTypeRadioGroup" id="otherDataDeviceTypeRadio1" type="radio" value="Laptop" />Laptop<br />
+		<input name="otherDataDeviceTypeRadioGroup" id="otherDataDeviceTypeRadio1" type="radio" value="Tablet" />Tablet<br />
+		<input name="otherDataDeviceTypeRadioGroup" id="otherDataDeviceTypeRadio1" type="radio" value="Phone" />Phone<br />
+		<br />
+		<h3>
+			Please describe what helped or hindered the ability to use the new password system
+		</h3>
+		<textarea name="otherDataHelpHinderTextarea" cols="40" rows="5" maxlength="4096"></textarea><br />
+		<br />
+		<h3>
+			Do you have any additional comments, suggestions, or improvements?
+		</h3>
+		<textarea name="otherDataCommentTextarea" cols="40" rows="5" maxlength="4096"></textarea><br />
+		<br />
+		<input name="otherDataValidHidden" id="otherDataValidHidden" type="hidden" value="false">
+	</form>
+	<div>
+		<center>
+			
+			<br />
+			<button id="clearResponseButton" class="redbutton" onclick="alert('If you wish to terminate the session without submitting the anonymized data, close the webpage. THIS IS IRREVERSIBLE'); document.getElementById('otherDataValidHidden').value = 'false';">
+				CANCEL
+			</button>
+			<button id="submitResponseButton" class="greenbutton" onclick="
+				var isValid = document.getElementById('otherDataForm').querySelectorAll(':invalid').length == 0;
+			  	if (isValid) {
+			  		isValid = confirm('Are you sure you wish to submit your anonymized data to the researchers? THIS IS IRREVERSIBLE');
+			  	} else { 
+			  		alert('There are missing responses in the survey!');
+			  	}
+			  	document.getElementById('otherDataValidHidden').value = (isValid ? 'true': 'false');">
+				SUBMIT
+			</button>
+		</center>
+	</div>
+</div>

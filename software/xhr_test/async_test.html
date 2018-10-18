@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+let myFirstPromise = new Promise((resolve, reject) => {
+  // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
+  // In this example, we use setTimeout(...) to simulate async code. 
+  // In reality, you will probably be using something like XHR or an HTML5 API.
+ 
+ // setTimeout(function(){
+    //resolve("Success!"); // Yay! Everything went well!
+  //}, 250);
+  resolve('Success!');
+});
+
+
+
+
+
+function car() {
+	console.log("CAR")
+}
+
+
+function bar() {
+	myFirstPromise.then((successMessage) => {
+	  	// successMessage is whatever we passed in the resolve(...) function above.
+	  	// It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+	  	console.log("Yay! " + successMessage);
+	  	car();
+	});
+	console.log("DIE")
+}
+
+async function foo() {
+	var ret = bar();
+//	await ret;
+	console.log("HI")
+}
+
+foo();
+/*
+
+function resolveAfter2Seconds(x) {
+  return new Promise(resolve => {
+          resolve(x);});
+}
+
+
+async function add1(x) {
+  const a = await resolveAfter2Seconds(20);
+  const b = await resolveAfter2Seconds(30);
+  return x + a + b;
+}
+
+add1(10).then(v => {
+  console.log(v);  // prints 60 after 4 seconds.
+});
+
+
+async function add2(x) {
+  const p_a = resolveAfter2Seconds(20);
+  const p_b = resolveAfter2Seconds(30);
+  console.log("HIT");
+  return x + await p_a + await p_b;
+}
+
+add2(10).then(v => {
+  console.log(v);  // prints 60 after 2 seconds.
+});
+*/
+</script>
+</body>
+</html>

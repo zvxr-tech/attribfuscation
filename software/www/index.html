@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--
+Attribfuscator Landing Page
+Mike Clark - 2017
+-->
+<html>
+	<head>
+		<title>Attribfuscator</title>
+	    <meta charset="utf-8"/>
+	    <meta name="author" content="Mike Clark">
+		<link rel="stylesheet" href="css/index.css" />
+	</head>
+	<body>
+		<h1>Attribfuscation: A New Class of Challenge-Response Authentication Systems</h1>		
+		<span>Mike Clark (c) 2017</span>
+		<h2>Abstract</h2>
+			<p>
+				In a *traditional* password system such as the numeric pinpad on most Automated Teller Machines (ATM), the user is presented with a challenge (i.e. the numerals 1 through 9 presented over a 3-by-3 grid), and the user must then enter the corresponding response (which is their secret/password). The correct secret is a successful response to the challenge presented, and a failure otherwise. However, this challenge-response password system suffers from attacks where an adversary can deduce the secret either directly (direct observation) or indirectly (physical indicators such as smudges or worn buttons). Once the adversary knows the secret, they can provide a valid response to the system. In other words, an adversary will know the password with absolute certainty after viewing the user enter their password once.
+			</p>
+			<p>
+				We propose a new challenge-response authentication (CRA) protocol and an implementation that uses the new protocol. The system allows for the adversary to have complete and full observations of a user's challenges and responses, yet there will still remain a calculable amount of uncertainty as to what the user's secret is. This property is leveraged to provide security against shoulder-surfing and smudge-like attacks.
+			</p>
+		<h2>Documentation</h2>
+			<ul>
+				<li>This <a href="../../README.md" title="Project Overview">README</a> provides an overview of the project file structure.</li>
+				<li>This <a href="../../paper/README.md" title="Whitepaper">README</a> provides a description of our proposed system and protocol written for a non-technical audience.</li>
+				<li>This <a href="../../README.md" title="Implementation Overview">README</a> provides a more technical description of our implementation and the autonomous usability study framework we developed.</li>
+				<li>The <a href="js/" title="Source Code">source code</a> is also extensively documented and should be referred to for specific details not found in the implementation README</li>
+			</ul>
+		<h2>Demonstration</h2>
+			<h3>Study Framework</h3>
+				Below you will find a link to a prepared usability study. For demonstration purposes, we have shortened the time for each section to 2 minutes (where the actual study was much longer in duration). As well, the telemetry is enabled, however, the study manifest has been set to not transmit the results and they are only stored in the client web browsers memory. In practice, this would be sent to a remote collection point (see documentation for more details).
+				<br />
+				<!--The live usability study demonstration is available-->
+				 <ul>
+				 	<li><a href="study.html" title="Usability Study">Usability study demo</a></li>
+				 	<li><a title="Study Manifest" href="template/study.manifest">Manifest file</a> that is used to dynamically generate this study.</li>
+				 </ul>
+			<h3>Standalone</h3>
+				The standalone demos provide additional controls so that you can modify the parameters of the system on-the-fly. The dial interface never made it into the actual study but is presented here as a standalone. It still needs a bit of work to get a more aesthetically pleasing presentation, however, it suffices to demonstrate the principle of attribfuscation and, using our study framework, could easily be incorporated into an actual study by adding the appropriate lines to the study manifest.
+				<ul>
+					<li><a href="gridShape.html" title="Usability Study">Attribute Grid Interface</a></li>
+					<li><a href="dial.html" title="Usability Study">Dial Interface</a> (not included in the study)</li>
+					<li><a href="gridNumeric.html" title="Usability Study">Numeric Grid Interface</a></li>
+				</ul>
+	</body>
+</html> 

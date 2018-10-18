@@ -1,0 +1,119 @@
+/*
+Attribfuscator - CSS Front-end
+Mike Clark - 2017
+*/
+body {
+    background-color: black;
+    color: white;
+}
+
+button {
+	width:144px;
+}
+
+.no-visible {
+    display: none;
+}
+
+#statusTextArea {
+	height: 5em;
+	width: 450px;
+}
+
+/* SVG text slection disable CSS from https://gist.github.com/23maverick23/64b3b587c88697558fac */
+svg text {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+svg text::selection {
+    background: none;
+}
+body * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+body *::selection {
+    background: none;
+}
+
+
+#secretSpace-pane svg text {
+    dominant-baseline: text-before-edge;
+    
+}
+
+
+#secretSpace-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+#secret-pane svg text {
+    dominant-baseline: text-before-edge;
+    text-anchor: start;
+}
+
+#secret-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+#secretCopy-pane svg text {
+    dominant-baseline: text-before-edge;
+    text-anchor: start;
+}
+
+#secretCopy-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+#challenge-pane svg text {
+    dominant-baseline: text-before-edge;
+    /*
+    dominant-baseline: middle;
+    text-anchor: middle;
+    */
+}
+
+
+
+
+#challenge-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+#challengeResponse-pane svg text {
+    dominant-baseline: text-before-edge;
+    text-anchor: start;
+}
+
+#challengeResponse-pane svg line {
+    stroke: rgb(255,255,255);
+    stroke-width: .02;
+}
+
+.challengeElement, use {
+    cursor: pointer;
+}
+
+button {     width: 180px; } input {     height: 1em; }
+
+#overlay-pane {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}

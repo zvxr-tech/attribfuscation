@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+Attribfuscator Implementation- HTML Front-end
+Mike Clark - 2017
+-->
+<html>
+	<head>
+		<title>Attribfuscator</title>
+	    <meta charset="utf-8"/>
+	    <meta name="author" content="Mike Clark">
+		<link rel="stylesheet" href="simple.css" />
+		<svg class="no-visible">
+	        <defs id="svgShapes">
+	            <polygon id ="square" points="0.2,0.2 0.2,0.8 0.8,0.8 0.8,0.2" />
+	            <polygon id="diamond" points="0.5,0.2 0.8,0.5 0.5,0.8 0.2,0.5" />
+	            <polygon id="hrect" points="0.1,0.33 0.9,0.33 0.9,0.66 0.1,0.66" />
+	            <polygon id="vrect" points="0.33,0.1 0.33,0.9 0.66,0.9 0.66,0.1" />
+
+	            <circle id="circle" cx="0.5" cy="0.5" r="0.35" />
+	            <polygon id="triangle-up" points="0.5,0.2 0.8,0.8 0.2,0.8" />
+	            <polygon id="triangle-down" points="0.5,0.8 0.2,0.2 0.8,0.2" />
+	            <polygon id="triangle-right" points="0.2,0.8 0.2,0.2 0.8,0.5" />
+	            <polygon id="triangle-left" points="0.8,0.8 0.8,0.2 0.2,0.5" />
+	            <polygon id="five-star" points="0.500,0.15 0.618,0.3820 0.85,0.382 0.691,0.618 0.809,0.85 0.5,0.764 0.191,0.85 0.309,0.618 0.15,0.382 0.382,0.382" />
+				<polygon id="pentagon" points="0.204032597266,0.390383806519 0.328154574132,0.7724553102 0.7299106204,0.7724553102 0.854032597266,0.390383806519 0.529032597266,0.154237644585 " />
+
+	            <polygon id="hexagon" points="0.39389544323,0.15351769672 0.20351769672,0.34389544323 0.20351769672,0.613139950211 0.39389544323,0.80351769672 0.663139950211,0.80351769672 0.85351769672,0.613139950211 0.85351769672,0.34389544323 0.663139950211,0.15351769672 " />
+
+	        </defs>
+		</svg>
+		
+		<script type="text/javascript" src="Common.js"></script>
+		<script type="text/javascript" src="simple.js"></script>
+		<script type="text/javascript">/*bootloader*/ window.onload = function() {var session = new Session();};</script>
+	</head>
+	<body><div id="overlay-pane" ></div><div></div></body>
+</html> 

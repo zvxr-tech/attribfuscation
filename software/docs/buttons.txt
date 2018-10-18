@@ -1,0 +1,115 @@
+html {
+  background: #010101;  
+  color: #eeeeee;
+}
+
+/* Buttons: https://codepen.io/benague/pen/bCkyr?q=button&limit=all&type=type-pens */
+
+button:focus {
+  outline:0;
+}
+
+button {
+  display: inline-block;
+  width: 35%;
+  height: 40px;
+  margin-right: 8%;
+  color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* FIRST SET OF BUTTONS */
+div.password-btns {
+  width: 300px;
+}
+
+.green {
+  background-color: #2ecc71;
+  box-shadow: 0px 5px 0px 0px #15B358;
+}
+
+.green:active {
+  background-color: #48E68B;
+}
+
+.red {
+  background-color: #e74c3c;
+  box-shadow: 0px 5px 0px 0px #CE3323;
+}
+
+.red:active {
+  background-color: #FF6656;
+}
+
+/* SECOND SET OF BUTTONS */
+div.direction-btns {
+  width: 100%;
+  text-align: center;
+}
+
+div.direction-btns button {
+  font-size: 15px;
+  height: 50px;
+}
+
+div.direction-btns button.done {
+  width: 50%;
+  margin-bottom: 20px;
+  font-weight: normal;
+}
+
+.grey {
+  background-color: #7f8c8d;
+  box-shadow: 0px 5px 0px 0px #6d7b7c;
+}
+
+.grey:active {
+  background-color: #8c9595;
+}
+
+.orange {
+  background-color: #e67e22;
+  box-shadow: 0px 5px 0px 0px #CD6509;
+}
+
+.orange:active {
+  background-color: #FF983C;
+}
+
+
+
+
+
+
+<div class="password-btns">
+  <button class="red">
+    Clear
+  </button>
+  <button class="green">
+    Submit
+  </button>
+</div>
+
+<br />
+<br />
+fdsfdsz
+<br />
+<br />
+
+<div class="direction-btns">
+  <button class="done grey">
+    Done instructions
+  </button>
+  <button class="back orange">
+    < Back
+  </button>
+  <button class="next orange">
+    Next >
+  </button>
+</div>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--
+Attribfuscator Dial Implementation - HTML Front-end
+Mike Clark - 2017
+-->
+<html>
+	<head>
+		<title>Attribfuscator</title>
+	    <meta charset="utf-8"/>
+	    <meta name="author" content="Mike Clark">
+		<link rel="stylesheet" href="css/dial.css" />
+		<script type="text/javascript" src="js/FileSaver.js"></script>
+		<script type="text/javascript" src="js/Common.js"></script>
+		<script type="text/javascript" src="js/Telemeter.js"></script>
+		<script type="text/javascript" src="js/Controller.js"></script>
+		<script type="text/javascript" src="js/BlackBox.js"></script>
+		<script type="text/javascript" src="js/KeyVal.js"></script>
+		<script type="text/javascript" src="js/UserInterface.js"></script>
+		<script type="text/javascript" src="js/UserInterfaceDialChallenge.js"></script>
+		<script type="text/javascript" src="js/UserInterfaceDialSecret.js"></script>
+
+
+		<script type="text/javascript">
+		/*bootloader*/ 
+		window.onload = function() {
+							var controller = new Controller(document, 
+															3, 8, 
+															'dial', 'challengeModeRandom',
+															8, 3,
+															50, 50,
+															9, 3,
+															50, 50,
+															8, 3,
+															50, 50,
+															9, 3,
+															50, 50,
+															4, 4);
+						};
+		</script>
+	</head>
+	<body>
+		<div id="overlay-pane" ></div>
+		<!--<h1>ATTRIBFUSCATOR</h1>-->
+        <div id="challenge-master-pane">
+	        <div id="challenge-pane">
+	        	<hr />
+	            <h3>Challenge</h3>
+	            <!-- JS logic will insert challenge SVG element here -->
+	        </div>
+			<div id="challenge-control">
+            	<hr />
+            	<h3>Challenge Controls</h3>
+            	<button id="newChallengeButton">New Challenge</button>
+            	<button id="clearResponseButton">Clear</button>
+            	<button id="submitResponseButton">Submit</button>
+            	
+            </div>
+	        <div id="challengeResponse-pane">
+	            <hr />
+	            <h3>Response</h3>
+	            <!-- JS logic will insert response SVG element here -->
+	        </div>
+	        <div id="secretCopy-pane">
+	        	<hr />
+	            <h3>Secret</h3>
+            	<!-- JS logic will insert secret response-copy SVG element here -->
+            </div>
+	        <div id="challengeResponseCopy-pane" class="no-visible">
+	        <!-- JS logic will insert response-copy SVG element here -->
+	        </div>
+		</div>
+
+        <div id="secret-master-pane" >
+            <div id="secretSpace-pane">
+            	<hr />
+            	<h3>Secret-space</h3>
+            	<!-- JS logic will insert secret challenge (I.e. secret-space) SVG element here -->
+            </div>
+            <div id="secret-control">
+            	<hr />
+                <h3>Secret Controls</h3>
+                <button id="setRandomSecretButton">Randomize</button>
+                <button id="clearSecretButton">Clear</button>
+                <button id="saveSecretButton">Save</button>
+            </div>
+            <div id="secret-pane">
+            	<hr />
+                <h3>Secret</h3>
+                <!-- JS logic will insert secret response SVG element here -->
+            </div>
+        </div>
+
+		<div id="status-master-pane">
+			<hr />
+        	<h3>Status</h3>
+			<textarea class="status-text"  id="statusTextArea"></textarea>
+		</div>
+		<div id="control-master-pane">
+        	<hr />
+        	<h3>Mode</h3>
+			<input type="radio" name="modeRadioGroup" id="modeChallengeRadio" value="modeChallenge"><label for="modeChallengeRadio">Challenge-Response</label>
+			<input type="radio" name="modeRadioGroup" id="modeSecretRadio" value="modeSecret" ><label for="modeSecretRadio">Secret Setup</label>
+			<br />
+			<label for="modeKeyNumber">Key Size</label><input type="number" name="modeKeyNumber" id="modeKeyNumber">
+			<br />
+			<label for="modeValNumber">Value Size</label><input type="number" name="modeValNumber" id="modeValNumber">
+			<br />
+			<label for="challengeModeRadioGroup">Challenge Mode</label>
+			<input type="radio" name="challengeModeRadioGroup" id="challengeModeIdentityRadio" value="challengeModeIdentity" ><label for="challengeModeIdentityRadio">Static</label>
+			<input type="radio" name="challengeModeRadioGroup" id="challengeModeRandomRadio" value="challengeModeRandom"><label for="challengeModeRandomRadio">Random</label>
+			<br />
+			<button name="modeResetButton" id="modeResetButton">Reset</button>
+			<hr />
+			<h3>Telemetry</h3>
+        	<input type="checkbox" name="enableTelemetryCheckbox" id="enableTelemetryCheckbox" value="telemetrySet" checked="false"/><label for="telemetryCheckbox">Enable Telemetry</label>
+        	<br />
+        	<input type="text" name="uidTextInput" id="uidTextInput" /><label for="uidTextInput">User ID</label>
+        	<br />
+        	<input type="text" name="sidTextInput" id="sidTextInput" /><label for="sidTextInput">Session ID</label>
+        	<br />
+        	<button name="saveAsTelemetryButton" id="saveAsTelemetryButton">Save As</button>
+        	<button name="clearTelemetryButton" id="clearTelemetryButton">Clear Data Buffers</button>
+		</div>
+	</body>
+</html> 
