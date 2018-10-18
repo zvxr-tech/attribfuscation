@@ -1,11 +1,3 @@
-# Title
-
-Attribfuscation: A New Class of Challenge-Response Authentication Systems
-
-# Author
-
-Mike Clark (c) 2017
-
 # Abstract
 
 In a *traditional* password system such as the numeric pinpad on most Automated Teller Machines (ATM), the user is presented with a challenge (i.e. the numerals 1 through 9 presented over a 3-by-3 grid), and the user must then enter the corresponding response (which is their secret/password). The correct secret is a successful response to the challenge presented, and a failure otherwise. However, this challenge-response password system suffers from attacks where an adversary can deduce the secret either directly (direct observation) or indirectly (physical indicators such as smudges or worn buttons). Once the adversary knows the secret, they can provide a valid response to the system. In other words, an adversary will know the password with absolute certainty after viewing the user enter their password once.
@@ -21,6 +13,9 @@ The remainder of the directory contains the beginnings of a formal whitepaper wr
 # Software
 The [software/](software) directory contains all of the source code libraries and documentation to implement our proposed system, as well as an extensible framework for rapidly prototyping new CRA systems. It also contains an extensible framework for conducting autonomous usability studies on arbitrary CRA systems.
 More details are available in the accompanying [README](software/README.md).
+
+# Demonstration
+A demonstration of the study framework, as well as three standalone implementations can be accessed [here](software/www/index.html).
 
 # Media
 The [media/](media/) directory contains media used in documentation. (This is independent of the media used within the software.)
