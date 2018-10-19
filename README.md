@@ -1,3 +1,5 @@
+Attribfuscation
+
 # Abstract
 
 In a *traditional* password system such as the numeric pinpad on most Automated Teller Machines (ATM), the user is presented with a challenge (i.e. the numerals 1 through 9 presented over a 3-by-3 grid), and the user must then enter the corresponding response (which is their secret/password). The correct secret is a successful response to the challenge presented, and a failure otherwise. However, this challenge-response password system suffers from attacks where an adversary can deduce the secret either directly (direct observation) or indirectly (physical indicators such as smudges or worn buttons). Once the adversary knows the secret, they can provide a valid response to the system. In other words, an adversary will know the password with absolute certainty after viewing the user enter their password once.
