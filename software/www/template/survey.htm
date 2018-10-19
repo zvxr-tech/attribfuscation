@@ -116,13 +116,13 @@
 		<center>
 			
 			<br />
-			<button id="clearResponseButton" class="redbutton" onclick="alert('If you wish to terminate the session without submitting the anonymized data, close the webpage. THIS IS IRREVERSIBLE'); document.getElementById('otherDataValidHidden').value = 'false';">
+			<button id="clearResponseButton" class="redbutton" onclick="alert('If you wish to terminate the session, close the webpage.'); document.getElementById('otherDataValidHidden').value = 'false';">
 				CANCEL
 			</button>
 			<button id="submitResponseButton" class="greenbutton" onclick="
 				var isValid = document.getElementById('otherDataForm').querySelectorAll(':invalid').length == 0;
 			  	if (isValid) {
-			  		isValid = confirm('Are you sure you wish to submit your anonymized data to the researchers? THIS IS IRREVERSIBLE');
+			  		isValid = confirm('This would normally ask "Are you sure you wish to submit your anonymized data to the researchers? THIS IS IRREVERSIBLE", but for this demonstration no data is transmitted/stored.');
 			  	} else { 
 			  		alert('There are missing responses in the survey!');
 			  	}

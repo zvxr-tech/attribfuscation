@@ -1,6 +1,6 @@
 1
 1
-remote
+none
 1
 other
 off
@@ -32,11 +32,11 @@ T0S_1,2,>
 grid-numeric
 on
 static
-You will now enter an evaluation phase. This is identical to the training phase, except it will last 5 minutes.
+You will now enter an evaluation phase. This is identical to the training phase, except it will last 2 minutes.
 section.htm
 T0S1
 T0S_2,0,>
-T300S1
+T120S1
 5
 other
 off
@@ -59,11 +59,11 @@ T0S_1,2,>
 grid-numeric
 on
 random
-You will now enter an evaluation phase. This is identical to the training phase, except it will last 5 minutes.
+You will now enter an evaluation phase. This is identical to the training phase, except it will last 2 minutes.
 section.htm
 T0S1
 T0S_2,0,>
-T300S1
+T120S1
 8
 other
 off
@@ -86,11 +86,11 @@ T0S_1,2,>
 grid
 on
 random
-You will now enter an evaluation phase. This is identical to the training phase, except it will last 5 minutes.
+You will now enter an evaluation phase. This is identical to the training phase, except it will last 2 minutes.
 section.htm
 T0S1
 T0S_2,0,>
-T300S1
+T120S1
 11
 other
 on

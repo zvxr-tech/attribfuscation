@@ -4,7 +4,7 @@ USER-DEFINED VARIABLES
 var XHR_TIMEOUT =5000; //ms 
 var OVERLAY_TIMEOUT = 500; //ms
 
-var EMAIL_SYSADMIN = 'INSERT_EMAIL_ADDRESS';
+var EMAIL_SYSADMIN = 'zvxr-tech@users.noreply.github.com';
 var TEMPLATE_DIR = 'template/';
 
 //Manifest filename

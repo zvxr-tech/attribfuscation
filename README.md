@@ -8,19 +8,19 @@ In this document, we propose a new challenge-response authentication (CRA) proto
 
 # Whitepaper
 
-The [paper/](paper/) directory contains files related to a writeup with respect to the proposed system and protocol.
+The [paper/](https://github.com/zvxr-tech/attribfuscation/tree/master/paper/) directory contains files related to a writeup with respect to the proposed system and protocol.
 The [README](paper/README.md) in the root of that directory contains a writeup for proposed system and protocol written for a non-technical audience.
 The remainder of the directory contains the beginnings of a formal whitepaper written in LaTex that is incomplete.
 
 # Software
-The [software/](software) directory contains all of the source code libraries and documentation to implement our proposed system, as well as an extensible framework for rapidly prototyping new CRA systems. It also contains an extensible framework for conducting autonomous usability studies on arbitrary CRA systems.
+The [software/](https://github.com/zvxr-tech/attribfuscation/tree/master/software) directory contains all of the source code libraries and documentation to implement our proposed system, as well as an extensible framework for rapidly prototyping new CRA systems. It also contains an extensible framework for conducting autonomous usability studies on arbitrary CRA systems.
 More details are available in the accompanying [README](software/README.md).
 
 # Demonstration
 A demonstration of the study framework, as well as three standalone implementations can be accessed [here](software/www/index.html).
 
 # Media
-The [media/](media/) directory contains media used in documentation. (This is independent of the media used within the software.)
+The [media/](https://github.com/zvxr-tech/attribfuscation/tree/master/media/) directory contains media used in documentation. (This is independent of the media used within the software.)
 
 # Theory
-The [theory/](theory/) directory contains MATLAB code that attempts to quantify the entropy of our system as a function of the number of challenge-response events an adversary has observed as well as the system parameters of the CRA.
+The [theory/](https://github.com/zvxr-tech/attribfuscation/tree/master/theory/) directory contains MATLAB code that attempts to quantify the entropy of our system as a function of the number of challenge-response events an adversary has observed as well as the system parameters of the CRA.
