@@ -1,8 +1,4 @@
-# Title
-
-Attribfuscation: A New Class of Challenge-Response Authentication Systems
-
-# Author
+# Attribfuscation: A New Class of Challenge-Response Authentication Systems
 
 Mike Clark (c) 2017
 
@@ -24,6 +20,9 @@ More details are available in the accompanying [README](software/README.md).
 
 # Media
 The [media/](media/) directory contains media used in documentation. (This is independent of the media used within the software.)
+
+# Demonstration
+A demonstration of the study framework, as well as three standalone implementations can be accessed [here](https://zvxr-tech.github.io/attribfuscation/software/www/index.html).
 
 # Theory
 The [theory/](theory/) directory contains MATLAB code that attempts to quantify the entropy of our system as a function of the number of challenge-response events an adversary has observed as well as the system parameters of the CRA.
